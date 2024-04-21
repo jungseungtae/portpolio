@@ -2,9 +2,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
+# 데이터 불러오기
 file_path = r'C:\Users\jstco\Downloads\hg-mldl-master\hg-mldl-master\fish.csv'
 fish = pd.read_csv(file_path)
 
+# 데이터 추출
 bream_smelt_date = fish[fish['Species'].isin(['Bream', 'Smelt'])]
 features = bream_smelt_date[['Length', 'Weight']]
 target = bream_smelt_date['Species'].values
@@ -14,7 +16,8 @@ def extract_species_data(data, species):
     length = species_data['Length'].values
     weight = species_data['Weight'].values
     return length, weight
-#
+
+# 각 변수에 할당
 bream_length, bream_weight = extract_species_data(bream_smelt_date, 'Bream')
 smelt_length, smelt_weight = extract_species_data(bream_smelt_date, 'Smelt')
 
@@ -43,6 +46,7 @@ import matplotlib.pyplot as plt
 # fish_data = [[l, w] for l, w in zip(length, weight)]
 # print(fish_data)
 
+# 데이터 타입 변환
 bream_length = np.array(bream_length)
 bream_weight = np.array(bream_weight)
 smelt_length = np.array(smelt_length)
@@ -57,6 +61,7 @@ fish_data = np.column_stack([length, weight])
 fish_target = [1] * 35 + [0] * 14
 # print(fish_target)
 
+# K-근접 이웃 모델 적용
 from sklearn.neighbors import KNeighborsClassifier
 
 kn = KNeighborsClassifier()
@@ -67,4 +72,4 @@ kn.fit(fish_data, fish_target)
 
 kn49 = KNeighborsClassifier(n_neighbors=49)
 kn49.fit(fish_data, fish_target)
-# print(kn49.score(fish_data, fish_target))
+print(kn49.score(fish_data, fish_target))
